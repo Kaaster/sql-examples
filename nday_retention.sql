@@ -1,9 +1,7 @@
--- data:
 -- Есть таблица пользователей user (user_id — id пользователя, installed_at — дата установки) 
--- и таблица активности client_session (user_id, created_at — таймстемп активности).
--- task:
+-- 	и таблица активности client_session (user_id, created_at — таймстемп активности).
 -- Необходимо написать SQL-запрос который считает Retention 1, 3, 7 дня по пользователям 
--- с группировкой установок по месяцам (с января 2022-го года).
+-- 	с группировкой установок по месяцам (с января 2022-го года).
 
 -- BigQuery Standart SQL
 select
@@ -33,7 +31,7 @@ from(
 				user_id,
 				date(created_at) as event_date
 			from client_session
-            where installed_at >= '2022-01-01'
+            		where installed_at >= '2022-01-01'
 		) using(user_id)
 		-- where event_date >= installed_at
 		group by 1, 2
