@@ -12,10 +12,10 @@
 */
 with df as (
 	with order_revenue as (
-		SELECT 
+		select 
 			order_id, 
 			sum(coalesce(price, 0.0)*coalesce(quantity, 0)) as revenue
-		FROM samokat.order_lines
+		from store.order_lines
 		group by 1
 	)
 	select 
@@ -23,7 +23,7 @@ with df as (
 		(current_date - max(order_date)) as recency,
 		count(distinct t1.order_id) as frequency,
 		sum(revenue) as monetary
-	from samokat.orders as t1
+	from store.orders as t1
 	left outer join order_revenue as t2
 	using(order_id)
 	group by 1
@@ -56,7 +56,7 @@ from(
 		user_id,
 		/*
 		 * возможна ситуация, когда одинаковым значениям присваивается разный перцентиль
-		 * для улучшения контроля присвоения перцентелей, добавлю доп колонки для агрегации
+		 * для улучшения контроля присвоения перцентелей, добавлю доп колонки для сортировки
 		 * ранжирование с доп полями даёт приоритет более активным и ценным пользователям
 		 */
 		percent_rank() over (order by recency desc, frequency desc, monetary desc) as recency_pr,
