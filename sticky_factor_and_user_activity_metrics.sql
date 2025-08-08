@@ -24,14 +24,14 @@ with df as (
     count(distinct t2.user_pseudo_id) as wau,
   from dau as t1
   left join df as t2 on t2.event_date between date_add(t1.event_date, interval -6 day) and t1.event_date
-  group by event_date
+  group by t1.event_date
 ), mau as (
   select 
     t1.event_date,
     count(distinct t2.user_pseudo_id) as mau,
   from dau as t1
   left join df as t2 on t2.event_date between date_add(t1.event_date, interval -29 day) and t1.event_date
-  group by event_date  
+  group by t1.event_date  
 )
 select 
   t1.event_date,  
@@ -107,6 +107,8 @@ select
   ifnull(safe_divide(t1.dau, t3.mau), 0.0) as dau_mau,
   ifnull(safe_divide(t2.wau, t3.mau), 0.0) as wau_mau,
 from dau as t1
+
 left join wau as t2 using(event_date, geo_country)
 left join mau as t3 using(event_date, geo_country)
 ;
+
