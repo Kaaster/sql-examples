@@ -107,8 +107,6 @@ select
   ifnull(safe_divide(t1.dau, t3.mau), 0.0) as dau_mau,
   ifnull(safe_divide(t2.wau, t3.mau), 0.0) as wau_mau,
 from dau as t1
-
 left join wau as t2 using(event_date, geo_country)
 left join mau as t3 using(event_date, geo_country)
 ;
-
